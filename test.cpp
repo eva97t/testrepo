@@ -1,39 +1,21 @@
-using namespace std;
-
-#include <iostream>
-#include <string>
-#include <vector>
-
-class LPS {
-
-public:
-  int findLPSLength(const string &st) {
-    vector<vector<int>> dp(st.length(), vector<int>(st.length(), 0));
-    // every sequence with one element is a palindrome of length 1
-    for (int i = 0; i < st.length(); i++) {
-      dp[i][i] = 1;
-    }
-
-    for (int startIndex = st.length() - 1; startIndex >= 0; startIndex--) {
-      for (int endIndex = startIndex + 1; endIndex < st.length(); endIndex++) {
-        // case 1: elements at the beginning and the end are the same
-        if (st[startIndex] == st[endIndex]) {
-          dp[startIndex][endIndex] = 2 + dp[startIndex + 1][endIndex - 1];
-        } else { // case 2: skip one element either from the beginning or the end
-          dp[startIndex][endIndex] =
-              max(dp[startIndex + 1][endIndex], dp[startIndex][endIndex - 1]);
-        }
-      }
-    }
-    return dp[0][st.length() - 1];
-  }
-};
-
-int main(int argc, char *argv[]) {
-  LPS *lps = new LPS();
-  cout << lps->findLPSLength("abdbca") << endl;
-  cout << lps->findLPSLength("cddpd") << endl;
-  cout << lps->findLPSLength("pqr") << endl;
-
-  delete lps;
-}
+Input: [3,3,5,0,0,3,1,4]
+Output: 6
+Explanation: 
+- Buy on day 4 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+- Then buy on day 7 (price = 1) and sell on day 8 (price = 4), profit = 4-1 = 3.
+    
+    
+    
+Input: [1,2,3,4,5]
+Output: 4
+Explanation: 
+- Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+- Note that you cannot buy on day 1, buy on day 2 and sell them later, as you are
+  engaging multiple transactions at the same time. You must sell before buying again.
+  
+  
+  
+Input: [7,6,4,3,1]
+Output: 0
+Explanation: 
+- In this case, no transaction is done, i.e. max profit = 0.
